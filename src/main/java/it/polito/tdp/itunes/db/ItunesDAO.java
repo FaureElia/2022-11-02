@@ -219,7 +219,8 @@ public class ItunesDAO {
 			conn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new RuntimeException("SQL Error");
+			System.out.println("errore database");
+			//throw new RuntimeException("Errore nel DB", e) ;
 		}
 		return result;
 		
