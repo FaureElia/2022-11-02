@@ -5,9 +5,13 @@
 package it.polito.tdp.itunes;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
 
+import it.polito.tdp.itunes.model.Genre;
 import it.polito.tdp.itunes.model.Model;
+import it.polito.tdp.itunes.model.Track;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -32,7 +36,7 @@ public class FXMLController {
     private Button btnPlaylist; // Value injected by FXMLLoader
 
     @FXML // fx:id="cmbGenere"
-    private ComboBox<?> cmbGenere; // Value injected by FXMLLoader
+    private ComboBox<Genre> cmbGenere; // Value injected by FXMLLoader
 
     @FXML // fx:id="txtDTOT"
     private TextField txtDTOT; // Value injected by FXMLLoader
@@ -48,11 +52,37 @@ public class FXMLController {
 
     @FXML
     void doCalcolaPlaylist(ActionEvent event) {
+    	
 
     }
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
+    	Genre genre=this.cmbGenere.getValue();
+    	String minS=this.txtMin.getText();
+    	String maxS=this.txtMax.getText();
+    	if(genre==null || minS==null || maxS==null) {
+    		this.txtResult.setText("inserire un genere");
+    		return;
+    	}
+    	try {
+    		double min=Double.parseDouble(minS);
+    		double max=Double.parseDouble(maxS);
+    		List<Set<Track> >vertici=this.model.creaGrafo(genre,min,max);	
+    		if(vertici==null) {
+    			this.txtResult.setText("inserire valori compatibili con il minimo e il massimo");
+    		}
+    		this.txtResult.setText("trovato grafo con: "+this.model.getVertici() +" vertici\n");
+    		this.txtResult.appendText("trovato grafo con: "+this.model.getNodi() +" nodi\n");
+    		
+    		for(Set<Track> compConn: vertici) {
+    			this.txtResult.appendText("componente connessa, dimensione : "+compConn.size()+".Numero Playlist:"+ this.model.numeroPlaylist(compConn)+"\n");
+    		}
+    		
+    	}catch(NumberFormatException e) {
+    		this.txtResult.setText("inserire numeri");
+    	}
+    	
 
     }
 
@@ -70,6 +100,7 @@ public class FXMLController {
     
     public void setModel(Model model) {
     	this.model = model;
+    	this.cmbGenere.getItems().addAll(model.getGenres());
     }
 
 }

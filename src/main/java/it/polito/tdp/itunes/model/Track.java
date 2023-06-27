@@ -1,5 +1,8 @@
 package it.polito.tdp.itunes.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Track {
 	private Integer trackId;
 	private String name;
@@ -7,8 +10,9 @@ public class Track {
 	private int milliseconds;
 	private int bytes;
 	private double unitPrice;
+	private List<Integer> playlists;
 	
-	public Track(Integer trackId, String name, String composer, int milliseconds, int bytes, double unitPrice) {
+	public Track(Integer trackId, String name, String composer, int milliseconds, int bytes, double unitPrice, int playlist) {
 		super();
 		this.trackId = trackId;
 		this.name = name;
@@ -16,8 +20,28 @@ public class Track {
 		this.milliseconds = milliseconds;
 		this.bytes = bytes;
 		this.unitPrice = unitPrice;
+		this.playlists= new ArrayList<Integer>();
+		this.playlists.add(playlist);
+		
 	}
 	
+
+
+	public List<Integer> getPlaylists() {
+		return playlists;
+	}
+
+
+	public void setPlaylists(List<Integer> playlists) {
+		this.playlists = playlists;
+	}
+	
+	public void addElementToPlaylists(int playlist) {
+		this.playlists.add(playlist);
+	}
+
+
+
 	public Integer getTrackId() {
 		return trackId;
 	}
